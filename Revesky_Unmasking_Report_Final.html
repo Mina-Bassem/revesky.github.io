@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Revesky Unmasking Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Root ──────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #1e1e2e;
+  --bg-2:        #181825;
+  --surface:     #24273a;
+  --surface-2:   #2a2d3e;
+  --border:      #363a4f;
+  --border-2:    #494d64;
+  --text:        #cad3f5;
+  --text-muted:  #8087a2;
+  --text-dim:    #6e738d;
+  --accent:      #8aadf4;
+  --accent-2:    #b7bdf8;
+  --green:       #a6da95;
+  --red:         #ed8796;
+  --yellow:      #eed49f;
+  --purple:      #c6a0f6;
+  --teal:        #8bd5ca;
+  --pink:        #f5bde6;
+  --orange:      #f5a97f;
+  --code-bg:     #181825;
+  --scrollbar:   #363a4f;
+  --heading:     #fff;
+  --link:        #8aadf4;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+
+/* ── Layout ────────────────────────────────────────────────────────────────── */
+.obsidian-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg-2);
+  border-right: 1px solid var(--border);
+  padding: 20px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 12px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.sidebar-brand svg {
+  opacity: 0.7;
+}
+
+.toc-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 0 16px 8px;
+}
+
+.toc-list {
+  list-style: none;
+  padding: 0;
+}
+
+.toc-item {
+  padding: 0;
+}
+
+.toc-link {
+  display: block;
+  padding: 5px 16px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 13px;
+  transition: all 0.15s ease;
+  border-left: 2px solid transparent;
+  line-height: 1.4;
+}
+
+.toc-link:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.05);
+  border-left-color: var(--accent);
+}
+
+.toc-link.active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: rgba(138,173,244,0.08);
+}
+
+.toc-h1 { padding-left: 16px; font-weight: 500; }
+.toc-h2 { padding-left: 28px; }
+.toc-h3 { padding-left: 40px; font-size: 12px; }
+
+/* ── Main Content ──────────────────────────────────────────────────────────── */
+.main-area {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  padding: 0 24px;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 780px;
+  padding: 60px 0 120px;
+}
+
+/* ── Tab bar (Obsidian feel) ───────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  align-items: center;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  padding: 0 20px;
+  height: 44px;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--surface);
+  border-radius: 6px 6px 0 0;
+  font-size: 13px;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-bottom: none;
+  max-width: 220px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.tab-icon { opacity: 0.6; font-size: 12px; }
+
+/* ── Typography ────────────────────────────────────────────────────────────── */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading);
+  font-weight: 600;
+  line-height: 1.35;
+  margin-top: 2.2em;
+  margin-bottom: 0.6em;
+  position: relative;
+}
+
+h1 { font-size: 2rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; margin-top: 0; }
+h2 { font-size: 1.5rem; border-bottom: 1px solid var(--border-2); padding-bottom: 0.35rem; }
+h3 { font-size: 1.2rem; }
+h4 { font-size: 1.05rem; }
+h5 { font-size: 0.95rem; }
+h6 { font-size: 0.9rem; color: var(--text-muted); }
+
+h1 .heading-anchor, h2 .heading-anchor, h3 .heading-anchor,
+h4 .heading-anchor, h5 .heading-anchor, h6 .heading-anchor {
+  opacity: 0;
+  font-size: 0.7em;
+  color: var(--accent);
+  text-decoration: none;
+  margin-left: 0.5em;
+  transition: opacity 0.2s;
+}
+
+h1:hover .heading-anchor, h2:hover .heading-anchor, h3:hover .heading-anchor,
+h4:hover .heading-anchor, h5:hover .heading-anchor, h6:hover .heading-anchor {
+  opacity: 1;
+}
+
+p {
+  margin: 0.9em 0;
+}
+
+strong { color: var(--text); font-weight: 600; }
+em { color: var(--text); font-style: italic; }
+del { color: var(--text-muted); text-decoration: line-through; }
+
+/* Obsidian highlight ==text== */
+mark {
+  background: rgba(255, 214, 0, 0.25);
+  color: var(--yellow);
+  border-radius: 3px;
+  padding: 0 3px;
+}
+
+/* ── Links ─────────────────────────────────────────────────────────────────── */
+a {
+  color: var(--link);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+a:hover {
+  color: var(--accent-2);
+  border-bottom-color: var(--accent-2);
+}
+
+.wikilink {
+  color: var(--purple);
+  background: rgba(198,160,246,0.08);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+
+/* ── Code ──────────────────────────────────────────────────────────────────── */
+code {
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  font-size: 0.84em;
+  background: var(--code-bg);
+  color: var(--pink);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  font-variant-ligatures: none;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  overflow-x: auto;
+  margin: 1.4em 0;
+  position: relative;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--text);
+  font-size: 0.88em;
+  line-height: 1.7;
+}
+
+.code-lang-label {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Syntax highlighting colours */
+.kw  { color: #c6a0f6; font-weight: 500; }
+.str { color: #a6da95; }
+.num { color: #f5a97f; }
+.cmt { color: #6e738d; font-style: italic; }
+.fn  { color: #8aadf4; }
+.cls { color: #eed49f; }
+.op  { color: #8bd5ca; }
+.key { color: #ed8796; }
+.val { color: #f5bde6; }
+
+/* ── Horizontal Rule ───────────────────────────────────────────────────────── */
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5em 0;
+}
+
+/* ── Blockquote (plain, non-callout) ────────────────────────────────────────── */
+blockquote {
+  border-left: 3px solid var(--border-2);
+  margin: 1.2em 0;
+  padding: 10px 20px;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+blockquote p { margin: 0.3em 0; }
+
+/* ── Callouts ──────────────────────────────────────────────────────────────── */
+.callout {
+  border-radius: 10px;
+  border: 1px solid;
+  margin: 1.4em 0;
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.callout:hover {
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.callout-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: default;
+  user-select: none;
+}
+
+.callout-header.foldable {
+  cursor: pointer;
+}
+
+.callout-icon {
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.callout-title {
+  flex: 1;
+}
+
+.callout-fold {
+  margin-left: auto;
+  font-size: 12px;
+  opacity: 0.6;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.callout.collapsed .callout-fold {
+  transform: rotate(-90deg);
+}
+
+.callout-body {
+  padding: 14px 16px 14px 20px;
+  border-top: 1px solid;
+  font-size: 0.93rem;
+  line-height: 1.75;
+}
+
+.callout.collapsed .callout-body {
+  display: none;
+}
+
+.callout-body p { margin: 0.4em 0; }
+.callout-body p:first-child { margin-top: 0; }
+.callout-body p:last-child { margin-bottom: 0; }
+
+.callout-body ul, .callout-body ol {
+  padding-left: 20px;
+  margin: 0.4em 0;
+}
+
+.callout-body img {
+  margin: 10px 0;
+}
+
+/* ── Images ────────────────────────────────────────────────────────────────── */
+img {
+  max-width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: 1em auto;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+img:hover {
+  transform: scale(1.01);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.img-missing {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border: 2px dashed var(--border-2);
+  border-radius: 8px;
+  padding: 20px;
+  color: var(--text-dim);
+  font-size: 0.85em;
+  margin: 1em 0;
+  gap: 8px;
+}
+
+/* ── Tables ────────────────────────────────────────────────────────────────── */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.4em 0;
+  font-size: 0.92em;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+thead tr {
+  background: var(--surface-2);
+}
+
+th {
+  padding: 10px 14px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--heading);
+  border-bottom: 2px solid var(--border);
+}
+
+td {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+}
+
+tbody tr:hover {
+  background: rgba(255,255,255,0.03);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Lists ─────────────────────────────────────────────────────────────────── */
+ul, ol {
+  padding-left: 28px;
+  margin: 0.7em 0;
+}
+
+li {
+  margin: 0.3em 0;
+  line-height: 1.7;
+}
+
+li::marker {
+  color: var(--text-muted);
+}
+
+/* Task lists */
+.task-list { list-style: none; padding-left: 4px; }
+.task-item { display: flex; align-items: flex-start; gap: 8px; margin: 0.35em 0; }
+.task-checkbox {
+  width: 16px; height: 16px; margin-top: 3px;
+  accent-color: var(--accent);
+  cursor: default;
+  flex-shrink: 0;
+}
+
+/* ── Tags ──────────────────────────────────────────────────────────────────── */
+.tag {
+  display: inline-block;
+  background: rgba(138,173,244,0.12);
+  color: var(--accent);
+  padding: 1px 8px;
+  border-radius: 12px;
+  font-size: 0.82em;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar); border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-2); }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .main-area { padding: 0 16px; }
+}
+
+@media print {
+  .sidebar, .tab-bar { display: none; }
+  body { background: white; color: black; }
+  .content-wrapper { padding: 20px; max-width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Tab bar (Obsidian aesthetic) -->
+<div class="tab-bar">
+  <div class="tab">
+    <span class="tab-icon">📄</span>
+    <span>Revesky Unmasking Report</span>
+  </div>
+</div>
+
+<div class="obsidian-layout">
+
+  <!-- Sidebar / TOC -->
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-brand">
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+          <path d="M50 5 L90 25 L90 75 L50 95 L10 75 L10 25 Z" fill="#7c3aed" opacity="0.8"/>
+          <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="#a78bfa" opacity="0.9"/>
+          <path d="M50 35 L65 45 L65 55 L50 65 L35 55 L35 45 Z" fill="#ddd6fe"/>
+        </svg>
+        Obsidian
+      </div>
+    </div>
+    <div class="toc-title">Table of Contents</div>
+    <ul class="toc-list" id="toc-list">
+      <li class="toc-item"><a href="#table-of-contents" class="toc-link toc-h2">Table of Contents</a></li>
+      <li class="toc-item"><a href="#00---tldr" class="toc-link toc-h1">00 - TL;DR</a></li>
+      <li class="toc-item"><a href="#introduction-methodology" class="toc-link toc-h1">INTRODUCTION & METHODOLOGY</a></li>
+      <li class="toc-item"><a href="#01--bovax-appears-in-hacker-groups" class="toc-link toc-h1">01- Bovax Appears in Hacker Groups</a></li>
+      <li class="toc-item"><a href="#02---telegram-bot" class="toc-link toc-h1">02 - Telegram Bot</a></li>
+      <li class="toc-item"><a href="#03---digital-infrastructure-channels-pricing-and-donations" class="toc-link toc-h1">03 - Digital Infrastructure: Channels, Pricing, and Donations</a></li>
+      <li class="toc-item"><a href="#04---does-he-actually-have-the-vodafone-system" class="toc-link toc-h1">04 - Does He Actually Have the Vodafone System?</a></li>
+      <li class="toc-item"><a href="#05---unmasking-the-first-admin" class="toc-link toc-h1">05 - Unmasking the First Admin</a></li>
+      <li class="toc-item"><a href="#06---bovax-reveals-he-is-wa03" class="toc-link toc-h1">06 - Bovax Reveals He is WA0_3</a></li>
+      <li class="toc-item"><a href="#07---tracking-wa03-across-forums" class="toc-link toc-h1">07 - Tracking WA0_3 Across Forums</a></li>
+      <li class="toc-item"><a href="#08---cybers102-team" class="toc-link toc-h1">08 - CyberS102 Team</a></li>
+      <li class="toc-item"><a href="#09---real-name-confirmation" class="toc-link toc-h1">09 - Real Name Confirmation</a></li>
+      <li class="toc-item"><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="toc-link toc-h1">10 -Tracking the Telegram Account via NFT Gifts</a></li>
+      <li class="toc-item"><a href="#11---tying-revesky-to-wa03" class="toc-link toc-h1">11 - Tying Revesky to WA0_3</a></li>
+
+    </ul>
+  </nav>
+
+  <!-- Main content -->
+  <div class="main-area">
+    <div class="content-wrapper" id="content">
+<h2 id="table-of-contents">Table of Contents<a href="#table-of-contents" class="heading-anchor">🔗</a></h2>
+<ul>
+  <li><a href="#00---tldr" class="wikilink">00 - TL;DR</a></li>
+  <li><a href="#span-classtagintroductionspan-methodology" class="wikilink"><span class="tag">#INTRODUCTION</span> & METHODOLOGY</a></li>
+  <li><a href="#01---the-first-thread-bovax-appears-in-hacker-groups" class="wikilink">01 - The First Thread: Bovax Appears in Hacker Groups</a></li>
+  <li><a href="#02---telegram-bot" class="wikilink">02 - Telegram Bot </a></li>
+  <li><a href="#03---telegram-channels" class="wikilink">03 - Telegram Channels</a></li>
+  <li><a href="#04---does-he-actually-have-the-vodafone-system" class="wikilink">04 - Does He Actually Have the Vodafone System?</a></li>
+  <li><a href="#05---unmasking-the-first-admin" class="wikilink">05 - Unmasking the First Admin</a></li>
+  <li><a href="#06---bovax-reveals-he-is-wa0_3" class="wikilink">06 - Bovax Reveals He is WA0_3</a></li>
+  <li><a href="#07---tracking-wa0_3-across-forums" class="wikilink"> 07 - Tracking WA0_3 Across Forums</a></li>
+  <li><a href="#08---cybers102-team" class="wikilink"> 08 - CyberS102 Team</a></li>
+  <li><a href="#09---real-name-confirmation" class="wikilink">09 - Real Name Confirmation</a></li>
+  <li><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="wikilink">10 -Tracking the Telegram Account via NFT Gifts</a></li>
+  <li><a href="#11---tying-revesky-to-wa0_3" class="wikilink"> 11 - Tying Revesky to WA0_3</a></li>
+</ul>
+<hr>
+<h1 id="00---tldr">00 - TL;DR<a href="#00---tldr" class="heading-anchor">🔗</a></h1>
+<div class="callout" style="border-color:#ff444440; background:rgba(255,68,68,0.08);">
+  <div class="callout-header" style="color:#ff4444; background:rgba(255,68,68,0.12);">
+    <span class="callout-icon">🔴</span>
+    <span class="callout-title">🔴 TL;DR  A Revesky Threat De-anonymized</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#ff444425;">
+    <p>A multi-month CTI operation has successfully unmasked an Egyptian threat network operating under the aliases <strong>Revesky, Bovax, and WA0_3</strong>. The actor breached critical sovereign entities across the Middle East including the <strong>Egyptian Ministries of Education and Tourism</strong>, and institutions in <strong>Saudi Arabia, Kuwait, and Iraq</strong>. Alarmingly, they also achieved <strong>direct, live access to Vodafone Egypt's internal systems</strong>. The threat actor's identity and infrastructure have been fully exposed and securely transferred to law enforcement.</p>
+  </div>
+</div>
+<h1 id="introduction-methodology">INTRODUCTION & METHODOLOGY<a href="#introduction-methodology" class="heading-anchor">🔗</a></h1>
+<p>In late 2025, we identified a Telegram account advertising access to Egyptian government databases. That discovery marked the beginning of a multi-month investigation that uncovered an interconnected network of underground forums, private Telegram groups, and threat actor personas operating under the aliases <strong>Revesky</strong>, <strong>WA0_3</strong>, and <strong>Bovax</strong>.</p>
+<p>As the investigation progressed, we uncovered a Telegram bot capable of querying data associated with the <strong>Egyptian Ministry of Supply</strong> and validated that the actor possessed live access to services associated with <strong>Vodafone Egypt</strong>. The same aliases were subsequently linked to breach advertisements and leaked data involving government entities, universities, and organizations across Egypt, Iraq, Saudi Arabia, and Kuwait, revealing an operation that extended well beyond isolated database leaks.</p>
+<p>Rather than relying on a single breakthrough, the attribution was built by correlating dozens of independent findings. Closed Telegram communities, recovered deleted messages, historical forum activity, infrastructure analysis, Telegram NFT gift tracking, blockchain artifacts, and operational security (OpSec) mistakes each contributed a small piece of the puzzle. Individually, none of these artifacts identified the actor. Together, they formed a high-confidence attribution linking multiple online identities to the same operator.</p>
+<p>This report reconstructs that investigation from beginning to end, documenting how each lead was discovered, validated, and connected until the complete picture emerged.</p>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">📝</span>
+    <span class="callout-title">📝 📌 How to Read This Report</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+    <p>This report is structured as a chronological investigative story  each section builds upon the previous one. We start from the first thread (the Bovax Telegram account) and follow it step by step until we reach the true identity and the final linkage to Revesky. Every claim is supported by visual evidence (screenshots, API responses, recovered deleted messages). We strongly recommend reading the sections in order.</p>
+  </div>
+</div>
+<h1 id="01--bovax-appears-in-hacker-groups">01- Bovax Appears in Hacker Groups<a href="#01--bovax-appears-in-hacker-groups" class="heading-anchor">🔗</a></h1>
+<p><strong>INITIAL DETECTION ( TELEGRAM GROUPS )</strong></p>
+<p>As a CTI firm, we have long maintained a presence in private hacker Telegram groups monitoring discussions, engaging where appropriate, and tracking threat actors over extended periods. During this monitoring, an account operating under the alias <strong>Bovax</strong> (Telegram ID: <code>7955791415</code>) drew our attention.</p>
+<p><strong>Bovax</strong> claimed to have direct access to the systems of the <strong>Egyptian Ministry of Supply</strong> (msit-cms.com). To establish credibility within these underground communities, he launched a promotional offer, telling members:</p>
+<blockquote><p><em>"Come on guys, first 20 national IDs i will search for free."</em></p></blockquote>
+<p>The offer meant that the <strong>first 20 users</strong> who submitted an Egyptian National ID number would receive a <strong>free lookup</strong> against what Bovax claimed was the Ministry of Supply's database. By providing these complimentary searches, he attempted to demonstrate that he possessed genuine access to the ministry's records and to build trust among potential buyers.</p>
+<p>After using these free lookups to convince members of the authenticity of his claims, Bovax escalated his offering by advertising <strong>full access</strong> to the ministry's infrastructure, posting messages such as:</p>
+<blockquote><p><em>"Who wants to buy Egyptian Ministry of Supply access?"</em></p></blockquote>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence:  Bovax offers Ministry of Supply database searches before advertising server access</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="TAMWEEN.png" alt="TAMWEEN.png" loading="lazy">
+    <p><strong><em>Bovax initially built credibility by offering free searches against what he claimed was the Egyptian Ministry of Supply database. After establishing trust with group members, he began advertising the sale of direct access to the ministry's systems.</em></strong></p>
+  </div>
+</div>
+<p>As we continued investigating Bovax, we used <strong>Dexpose's</strong> intelligence platform to search across Telegram communities and reconstruct his activity. This allowed us to recover his messages from numerous public hacker groups, as well as several private groups where he had been active.</p>
+<p>Among these messages, Bovax repeatedly claimed that he was <strong>responsible for breaching nearly half of Iraq's universities</strong>, presenting himself as the threat actor behind many of those compromises. He also stated that he had <em>"obtained more than 6 CVEs"</em>.</p>
+<p>At that stage of the investigation, we had not yet realized that these claims were only the beginning of a much larger operation.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram  Bovax claims hacking Iraqi universities  October 2025</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="94844d05-b19f-4a05-a37b-ce95f41f5e24.png" alt="94844d05-b19f-4a05-a37b-ce95f41f5e24.png" loading="lazy">
+    <p><strong><em>"I've done many things and I am the leaker for most universities in Iraq" + "Bro, I have obtained more than 6 CVEs"  ( October 2025 )</em></strong></p>
+  </div>
+</div>
+<p>Simultaneously, we searched for the username "<strong>Bovax</strong>" on known hacker forums like <strong>BreachForums (BF)</strong> and <strong>DarkForums (DF)</strong>. We found the exact same account leaking employee data from the <strong>Kuwaiti Ministry of Electricity, Water and Renewable Energy</strong> for free, with a direct GoFile <strong>download</strong> link:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: DarkForums  Bovax publishes Kuwaiti Ministry leak  October 2025</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="a71a7cf7-eeb2-4978-8973-bd8c17abe34a.png" alt="a71a7cf7-eeb2-4978-8973-bd8c17abe34a.png" loading="lazy">
+    <p><strong><em>"Databases of employees Kuwait Ministry of Electricity, Water and Renewable Energy"  Full names, phone numbers, employee file numbers, locations, IMEI with public download link available</em></strong></p>
+  </div>
+</div>
+<h1 id="02---telegram-bot">02 - Telegram Bot<a href="#02---telegram-bot" class="heading-anchor">🔗</a></h1>
+<p><strong>TELEGRAM BOT INFRASTRUCTURE</strong></p>
+<hr>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">💡</span>
+    <span class="callout-title">💡 Turning Point: Discovering the Bot</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+  </div>
+</div>
+<p>While monitoring Bovax's messages, we observed a third party sharing the username of a Telegram bot @EgyFatherBot and claiming that it belonged to Bovax, stating that he intended to continue developing it in the future. At this stage, however, this was merely an unverified claim made by a third party, with no independent evidence confirming ownership. As shown in the following section, we will later present evidence that substantiates this claim.</p>
+<img src="9bedfcc3-e4c0-4cdb-8771-ebd27033fc5d.png" alt="9bedfcc3-e4c0-4cdb-8771-ebd27033fc5d.png" loading="lazy">
+<p><strong><em>Confirmation from a third party that the bot belongs to Bovax "an old bot, they're updating it"</em></strong></p>
+<img src="3c065f48-1076-4c30-9aae-a78104c9ad20.png" alt="3c065f48-1076-4c30-9aae-a78104c9ad20.png" loading="lazy">
+<p><em>Sending <strong>/start</strong> requires subscribing to the <strong>@MrJinnTelegram</strong> channel</em></p>
+<p>The CTI team monitored the bot for over <strong>two continuous months</strong>. When sending <code>/start</code>, the bot requires subscribing to the channel **@MrJinnTelegram  as a prerequisite to function. The bot was initially free for a significant period before transitioning to a paid model.</p>
+<p>We discovered that the bot relies on a <strong>mix of leaked databases and private databases that we had never seen offered for sale on any forum previously</strong>. More alarmingly, the bot operates in tiers a public free tier, and a hidden tier only visible to the bot owners' <strong>circle of trust</strong>:</p>
+<div class="callout" style="border-color:#ff444440; background:rgba(255,68,68,0.08);">
+  <div class="callout-header" style="color:#ff4444; background:rgba(255,68,68,0.12);">
+    <span class="callout-icon">🔴</span>
+    <span class="callout-title">🔴 Discovered Bot Capabilities  ( Three Tiers )</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#ff444425;">
+    <p><strong>Tier 1 - DBS Database:</strong> Complete Egyptian national ID card data along with <strong>actual images of the cards</strong>. Below each card image is a link to the @Jinnhack channel.</p>
+    <p><strong>Tier 2 - Ministry of Supply MSIT-CMS (Public & Paid):</strong> A section visible to users but requiring a paid subscription. Searching by phone number or national ID returns the complete ration card data, including family members and their individual national IDs.</p>
+    <p><strong>Tier - Vodafone Egypt (Hidden for Circle of Trust Only):</strong> A secret section not visible to normal users. Upon entering any Egyptian Vodafone number, it displays the full details of the line owner <strong>in real-time from Vodafone's internal system</strong>.</p>
+  </div>
+</div>
+<img src="91a1320d-7c49-4bae-909f-737009354f23.png" alt="91a1320d-7c49-4bae-909f-737009354f23.png" loading="lazy">
+<p><strong><em>The bot outputs national ID card data with its actual  linking to the @Jinnhack channel below</em></strong></p>
+<img src="95d4ee58-2897-4201-94d6-cb179bc26067.png" alt="95d4ee58-2897-4201-94d6-cb179bc26067.png" loading="lazy">
+<p><strong><em>The bot displaying Ministry of Supply data( family members and their individual national IDs )</em></strong></p>
+<p>After the free subscription period expires, a message appears asking the user to directly contact <strong>@bovvax</strong> to renew:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Bot Subscription Expiry Message Directs users to Bovax</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="1554a0cf-f2b4-4616-8a41-5547ecf8f311.png" alt="1554a0cf-f2b4-4616-8a41-5547ecf8f311.png" loading="lazy">
+    <p><em>"Subscription Expired Contact @<strong>bovvax</strong> to renew"  The direct admin of the bot</em></p>
+  </div>
+</div>
+<h1 id="03---digital-infrastructure-channels-pricing-and-donations">03 - Digital Infrastructure: Channels, Pricing, and Donations<a href="#03---digital-infrastructure-channels-pricing-and-donations" class="heading-anchor">🔗</a></h1>
+<p><strong>DIGITAL INFRASTRUCTURE MAPPING</strong></p>
+<p>By tracking the two channels linked to the bot, we found that the digital infrastructure consists of four interconnected tiers:</p>
+<p><strong>Infrastructure Chain:</strong></p>
+<ul>
+  <li>**@EgyFatherBot (Main Bot)</li>
+  <li>**@MrJinnTelegram (Mandatory Subscription Channel)</li>
+  <li><strong>@Jinnhack</strong> (Main Sales Channel)</li>
+  <li>**@jinnhackers (Discussion Group)</li>
+</ul>
+<p>Searching through the old messages of the @Jinnhack channel, we found that Bovax was an admin there and had posted the bot's subscription prices:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram Channel - Bovax posting subscription prices 600 EGP Monthly / 300 EGP Weekly</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="026a6f8c-6486-405f-b61b-ce84001c4b8f.png" alt="026a6f8c-6486-405f-b61b-ce84001c4b8f.png" loading="lazy">
+    <p><em>"To subscribe to the bot contact @bovvax  monthly subscription price is 600 EGP weekly is 300 EGP"</em></p>
+  </div>
+</div>
+<p>They were also requesting Bitcoin donations to keep the bot running for free:</p>
+<p>Bitcoin Address: <code>bc1qjlwzkf77███████████████djtllrkagtn48l</code></p>
+<img src="BTC.png" alt="BTC.png" loading="lazy">
+<h1 id="04---does-he-actually-have-the-vodafone-system">04 - Does He Actually Have the Vodafone System?<a href="#04---does-he-actually-have-the-vodafone-system" class="heading-anchor">🔗</a></h1>
+<p><strong>LIVE API ACCESS VERIFICATION</strong></p>
+<div class="callout" style="border-color:#ff444440; background:rgba(255,68,68,0.08);">
+  <div class="callout-header" style="color:#ff4444; background:rgba(255,68,68,0.12);">
+    <span class="callout-icon">🔴</span>
+    <span class="callout-title">🔴 This is not an old leak, it's a live access</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#ff444425;">
+    <p>The hidden Vodafone section in the bot piqued our curiosity. The most important question: <strong>Is this just an old leaked database? Or does he actually have live access to Vodafone's internal system?</strong> To answer this question, we designed a foolproof test.</p>
+  </div>
+</div>
+<p><strong>Verification Plan:</strong> I contacted Bovax pretending to be a serious buyer interested in purchasing direct API access to the Vodafone system. However, before paying, I wanted to verify his credibility. Therefore:</p>
+<ol>
+  <li><strong>I purchased a brand new Vodafone line</strong> registered in my name , a line that did not exist in any previous leak because it was new.</li>
+  <li><strong>I sent the new line number to Bovax</strong> and asked him to query it as a test.</li>
+  <li><strong>The response came back in seconds</strong> , a complete JSON response from the internal Vodafone system.</li>
+  <li><strong>I compared the results with the original contract</strong> , 100% match: name, national ID, governorate, plan type, and account status.</li>
+</ol>
+<pre><span class="code-lang-label">json</span><code><span class="cmt">// Direct Vodafone API Response , the number is completely new and has never been leaked</span>
+[
+  {
+    <span class="key">"IDs"</span>: [{ <span class="key">"schemaName"</span>: <span class="str">"ContractID"</span>, <span class="key">"value"</span>: <span class="str">"2███████4"</span> }],
+    <span class="key">"categories"</span>: [
+      { <span class="key">"listHirarchyId"</span>: <span class="str">"Payment"</span>, <span class="key">"value"</span>: <span class="str">"Prepaid"</span> },
+      { <span class="key">"listHirarchyId"</span>: <span class="str">"Tariff"</span>, <span class="key">"value"</span>: <span class="str">"Flex_Family_2021"</span> },
+      { <span class="key">"listHirarchyId"</span>: <span class="str">"CustomerType"</span>, <span class="key">"value"</span>: <span class="str">"PREPAID"</span> }
+    ],
+    <span class="key">"contact"</span>: [{
+      <span class="key">"contactFirstName"</span>: <span class="str">"█████████"</span>,
+      <span class="key">"contactLastName"</span>: <span class="str">"██████████████████"</span>,
+      <span class="key">"nationalID"</span>: <span class="str">"3████████████████"</span>,
+      <span class="key">"city"</span>: <span class="str">"D██████a"</span>
+    }],
+    <span class="key">"billingAccount"</span>: {
+      <span class="key">"state"</span>: <span class="str">"ACTIVE"</span>
+    }
+  }
+]
+<span class="cmt">// ⚠ Result: <span class="num">100</span>% match with contract data , line is new and not in any leak ← live access confirmed</span></code></pre>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">💡</span>
+    <span class="callout-title">💡 🔍 Analysis: How can he access it?</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+    <p>The response structure matches the <strong>Vodafone TM Forum Open API</strong>. This suggests one of three scenarios: (A) Compromised internal employee credentials, (B) An IDOR vulnerability in an improperly authenticated API endpoint. or (C) A breach of a third-party vendor integrating with Vodafone's system. <strong>In all cases, this is direct, live access not a leaked database.</strong></p>
+  </div>
+</div>
+<h1 id="05---unmasking-the-first-admin">05 - Unmasking the First Admin<a href="#05---unmasking-the-first-admin" class="heading-anchor">🔗</a></h1>
+<p><strong>DE-ANONYMIZATION , ADMIN #1</strong></p>
+<p>While tracking the discussion group <strong>@jinnhackers</strong> linked to the @Jinnhack channel , We noticed something important: a message forwarded from the channel to the discussion group, but the message was <strong>deleted</strong>. Despite the deletion, the <strong>sending admin's signature</strong> remained visible in the group.</p>
+<img src="d22c4e83-67c0-434c-86da-3bf8ba3d77a7.png" alt="d22c4e83-67c0-434c-86da-3bf8ba3d77a7.png" loading="lazy">
+<p><em>*</em>Discussion group showing the admin signature  "⚕️𓂆 مارو-Maro"</p>
+<p>Using <strong>Dexpose's</strong> intelligence tools, we recovered deleted messages from the <strong>MrJinnTelegram</strong> and <strong>Jinnhack</strong> channels. Among them, we identified a message posted by an administrator using the same name that had previously appeared in a deleted message from the <strong>⚕️𓂆 مارو-Maro</strong> discussion group.</p>
+<img src="358e0ef2-95f1-4e90-a1dd-6f2feb706251.png" alt="358e0ef2-95f1-4e90-a1dd-6f2feb706251.png" loading="lazy">
+<p><strong><em>Sender: @j_s_9  "What do you want me to drop for you today guys?"</em></strong></p>
+<img src="MARO2.png" alt="MARO2.png" loading="lazy">
+<p>The sending account was <strong>@J_s_9</strong> (Telegram ID: <code>956893993</code>). Analyzing this account, we found that it bore the name <strong>⚕️𓂆 مارو-Maro</strong> , and it was the very first account to send a message in the jinn chat group (in September 2021 , when the Fsociety <strong>@J_s_9</strong> <code>956893993</code>  account added a member named SANGOB). This signifies that he is a founder:</p>
+<img src="71d5738d-df80-4938-842f-2858577f26d7.png" alt="71d5738d-df80-4938-842f-2858577f26d7.png" loading="lazy">
+<p><strong><em>First message in the group , September 2021 , Fsociety adding a member , proving he is a founder</em></strong></p>
+<img src="62e2244e-9687-40c9-849f-f4461760265c.png" alt="62e2244e-9687-40c9-849f-f4461760265c.png" loading="lazy">
+<p><strong><em>Profile of @J_s_9 , Name "Fsociety" , ID: 956893993</em></strong></p>
+<p><strong>Now the decisive step:</strong> Using our DeXpose's internal tools to query the phone number associated with the Telegram ID <code>956893993</code>, we obtained the number: <strong>01090876870</strong>.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 DeXpose's internal tools to query the phone number associated with the Telegram ID</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+  </div>
+</div>
+<img src="MARO PHONE.png" alt="MARO PHONE.png" loading="lazy">
+<p>Searching our internal threat intelligence portal, we found this number linked to a <strong>compromised device</strong> registered under the name <strong>MARO</strong>. The number appeared specifically in the <strong>autofills</strong> section meaning the device itself had been previously compromised, and its auto-saved data (passwords, phone numbers) were available to us. Within the autofill data, we also found a <strong>landline number starting with 05</strong>  which is the area code for landlines in <strong>Sharqia Governorate</strong>, Egypt.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Internal Portal Compromised device named MARO linked to 01090876870</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="MARO.png" alt="MARO.png" loading="lazy">
+    <p><strong><em>Internal portal showing the number 01090876870 linked to a compromised device named MARO  the number is in the autofills section along with a landline number from Sharqia Governorate</em></strong></p>
+  </div>
+</div>
+<div class="callout" style="border-color:#00c85340; background:rgba(0,200,83,0.08);">
+  <div class="callout-header" style="color:#00c853; background:rgba(0,200,83,0.12);">
+    <span class="callout-icon">✅</span>
+    <span class="callout-title">✅ Identity Confirmed , Admin #1 "Maro"</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#00c85325;">
+    <p>In cooperation with the Egyptian authorities to determine the ownership of the phone number <strong>01090876870</strong>, we obtained the subscriber's records, which revealed that the number was registered under the <strong>father's</strong> name:</p>
+  </div>
+</div>
+<p><strong>Father's Name:</strong> Mohamed Shaban Emam Mohamed</p>
+<blockquote><p><strong>National ID:</strong> <code>27207161300492</code> </p></blockquote>
+<p><strong>Address:</strong> Al-Shabanat, Sharqia</p>
+<blockquote><p><strong>Email:</strong> mohamedmandi311@yahoo.com  </p></blockquote>
+<blockquote><p>We then managed to obtain the details of his <strong>son</strong>, the individual identified during the investigation: </p></blockquote>
+<blockquote><p><strong>Name:</strong> Mohamed Mohamed Shaban Emam </p></blockquote>
+<blockquote><p><strong>National ID:</strong> <code>30301071301731</code> </p></blockquote>
+<blockquote><p><strong>Date of Birth:</strong> 07/01/2003 (Age: 22) </p></blockquote>
+<blockquote><p><strong>Governorate:</strong> Sharqia </p></blockquote>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">📝</span>
+    <span class="callout-title">📝 🔗 Chain of Evidence for Maro</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+    <p>Recovered deleted message -> @J_s_9 account -> Telegram ID 956893993 -> Phone number 01090876870 -> Compromised device MARO in internal portal -> Sharqia landline number -> Government coordination -> Father and son data confirmed.</p>
+  </div>
+</div>
+<h1 id="06---bovax-reveals-he-is-wa03">06 - Bovax Reveals He is WA0_3<a href="#06---bovax-reveals-he-is-wa03" class="heading-anchor">🔗</a></h1>
+<p><strong>SELF-INCRIMINATION , PERSONA LINKAGE</strong></p>
+<p>After proving that Bovax indeed possessed live access to the Vodafone system, we engaged him more deeply, feigning interest in making a purchase. We asked him: <em>"How can you access data like this?"</em></p>
+<p>His response was surprising in a moment of <strong>pride and boasting</strong>, he wanted to prove he wasn't merely a broker, but a real hacker and a known leaker. He literally said:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram  Private Chat  Bovax confesses his identity as WA0_3</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="9023ad36-1e7f-448d-8e78-89c01b9e37a4.jpg" alt="9023ad36-1e7f-448d-8e78-89c01b9e37a4.jpg" loading="lazy">
+    <p><em>Bovax says: "Man" , "No honestly" , "I am a leaker" , "That's my alias" , then he sends: <strong>@WA0_3</strong></em></p>
+  </div>
+</div>
+<p>He didn't stop there he proceeded to send <strong>two voice messages</strong> detailing exactly how he operates and what his capabilities are. We retained the voice messages as hard evidence:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Audio Evidence Two voice messages from Bovax  48 seconds + 13 seconds</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="85dd15d5-7961-420b-977d-dfedf469d254.png" alt="85dd15d5-7961-420b-977d-dfedf469d254.png" loading="lazy">
+    <p><em>"Forwarded from Bovax"  Two voice messages (00:48 + 00:13 = 51.8KB) retained as evidence</em></p>
+  </div>
+</div>
+<div class="callout" style="border-color:#ffd60040; background:rgba(255,214,0,0.08);">
+  <div class="callout-header" style="color:#ffd600; background:rgba(255,214,0,0.12);">
+    <span class="callout-icon">⚠️</span>
+    <span class="callout-title">⚠️ ⚡ The Significance of This Confession</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#ffd60025;">
+    <p>This confession links two accounts that appeared independent: <strong>Bovax (ID: 7955791415)</strong> , the bot operator and access seller , is the exact same person as <strong>@wa0_3 (ID: 7060080770)</strong> , the active hacker on forums. This means all of wa0_3's forum activity is now directly attributed to the bot operator.</p>
+  </div>
+</div>
+<h1 id="07---tracking-wa03-across-forums">07 - Tracking WA0_3 Across Forums<a href="#07---tracking-wa03-across-forums" class="heading-anchor">🔗</a></h1>
+<p><strong>CROSS-PLATFORM OSINT , FORUM LEAKS</strong></p>
+<p>After confirming that Bovax is wa0_3, we launched a systematic search across hacker forums. We found an active account under the same name showing interest in Egyptian and Saudi data:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Hacker Forums , wa0_3 Activity , Egyptian and Saudi Data</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="26071a14-b01c-48f3-b7c5-a05431d48bc8.png" alt="26071a14-b01c-48f3-b7c5-a05431d48bc8.png" loading="lazy">
+  </div>
+</div>
+<p><strong>The Most Critical Discovery:</strong> The forum where wa0_3 was registered had its own database <strong>leaked and made public</strong>. Searching through this leak, we extracted the email associated with his account:</p>
+<img src="Dear201.png" alt="Dear201.png" loading="lazy">
+<p><code>wa0_3 email (from forum DB leak): Dear201dear@gmail.com</code></p>
+<p>We also found a Medium account <a href="https://medium.com/@wa0_3" target="_blank" rel="noopener">medium.com/@wa0_3</a> where he posted write-ups for some of the breaches he executed.</p>
+<p>Digging deeper, we found another similar username: <strong>wa0__3</strong> (with two underscores) on the same forum. From the forum database leak, we retrieved its email as well:</p>
+<p><code>wa0__3 email (from forum DB leak): wa3ziadwa@gmail.com</code></p>
+<blockquote><p>!<a href="#wa0__3png" class="wikilink">wa0__3.png</a></p></blockquote>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">💡</span>
+    <span class="callout-title">💡 Email Analysis: First Clue to the Real Name</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+    <p>The email <strong>wa3ziadwa@gmail.com</strong> can be broken down into: <code>wa3</code> + <code>ziad</code> + <code>wa</code>. The name <strong>"Ziad"</strong> clearly appears in the middle of the email. Is this his real name? At this stage, it was just a faint possibility but we will soon see how we confirmed it with undeniable evidence.</p>
+  </div>
+</div>
+<h1 id="08---cybers102-team">08 - CyberS102 Team<a href="#08---cybers102-team" class="heading-anchor">🔗</a></h1>
+<p><strong>THREAT ACTOR GROUP</strong></p>
+<p>While tracking the messages of <strong>wa0_3 (ID: 7060080770)</strong> on Telegram using company tools, we found him claiming in a public group that he, together with <strong>@wa0_0_o, @Wa0, @yosvz, and @sh4dx0r</strong>, was responsible for breaching the <strong>Saudi Ministry of Justice</strong>.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , wa0_3 claims involvement in the Saudi Ministry of Justice breach</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="b1d684f7-a104-40cc-9c27-6cb5e0aacbfa.png" alt="b1d684f7-a104-40cc-9c27-6cb5e0aacbfa.png" loading="lazy">
+    <p><em>"We reached sensitive information -- @wa0_0_o, @Wa0, @yosvz, and @sh4dx0r as participants.</em></p>
+  </div>
+</div>
+<p>Searching underground forums for the <strong>Saudi Ministry of Justice</strong> breach, we located the original leak thread. The publisher, using the alias <strong>mrxzyx1</strong>, included a contact link directing users to the <strong>CyberS102</strong> Telegram channel, establishing a direct association between the breach and the CyberS102 group.</p>
+<p>From the leaked forum database, we also obtained the email address associated with the publisher:</p>
+<p><code>mrxhamster1@gmail.com</code></p>
+<blockquote><p>!<a href="#cybers102png" class="wikilink">cybers102.png</a></p></blockquote>
+<p>Searching for <strong>CyberS102</strong> across the company's Telegram intelligence tools, we identified the group's members and their roles.</p>
+<p><strong>Confirmed CyberS102 Members:</strong></p>
+<ul>
+  <li><strong>@wa0_3</strong> (ID: 7060080770) = <strong>Bovax</strong></li>
+  <li><strong>@td9_l</strong> (ID: 7770242881) <code>+201157626459</code></li>
+  <li><strong>@V9_9_i</strong> (ID: 8015824070)  <code>+9647838025000</code></li>
+</ul>
+<p>We also obtained the registered phone numbers associated with <strong>@td9_l</strong> and <strong>@V9_9_i</strong> using the company's Telegram attribution tools.</p>
+<p>Further investigation into the CyberS102 channel revealed that the group publicly claimed responsibility for compromising multiple Iraqi universities.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram Channel , CyberS102 , Hacking 9+ Iraqi universities</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="06383c29-b9ac-4a14-8df8-7eeb0151b212.png" alt="06383c29-b9ac-4a14-8df8-7eeb0151b212.png" loading="lazy">
+    <p><em>CyberS102 announces the breach of: uobasrah, uoqasim, tu, qu, meuc, uos, ashur, uomisan, uomosul, kus , ~100K student and teacher records | March–April 2025</em></p>
+  </div>
+</div>
+<p>Separately, while continuing to monitor <strong>wa0_3</strong>'s Telegram activity, we found him boasting in another public group that he had <em>"hacked half the universities in Iraq."</em></p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , Public Group , wa0_3 claims hacking half of Iraq's universities , April 2025</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="e0b9efdb-3dc9-490e-b6c9-812c94ae9145.png" alt="e0b9efdb-3dc9-490e-b6c9-812c94ae9145.png" loading="lazy">
+    <p><em>"You exposed me hehehe look at my channel I've hacked half the universities in Iraq."</em></p>
+  </div>
+</div>
+<blockquote><p><strong>Note:</strong> In addition to Bovax's explicit admission that he is the same person as <strong>@wa0_3</strong>, another common link between the two identities is their involvement in the compromise of Iraqi universities, further reinforcing that both accounts are operated by the same individual.</p></blockquote>
+<h1 id="09---real-name-confirmation">09 - Real Name Confirmation<a href="#09---real-name-confirmation" class="heading-anchor">🔗</a></h1>
+<p><strong>DE-ANONYMIZATION , REAL NAME CONFIRMATION</strong></p>
+<p>Intensifying our search through the messages of the <strong>wa0_3 (ID: 7060080770)</strong> account, we found a revealing series of messages in a public group , three consecutive messages dated April 14, 2025:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , Public Group , wa0_3 asks about his kicked second account then reveals his name</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="117ba536-0d3d-441b-8046-cfa2c7b7a40e.png" alt="117ba536-0d3d-441b-8046-cfa2c7b7a40e.png" loading="lazy">
+    <p><em>14:27 , "Who kicked my second account" | 14:27:49 , "i5_g7" (Backup account) | 14:29 , "I am Ziad"</em></p>
+  </div>
+</div>
+<p>The sequence of events is clear: (1) wa0_3 asks <em>"Who kicked my second account"</em>, (2) he mentions the name of the kicked account: <strong>i5_g7</strong>, (3) someone asks him <em>"Who are you?"</em>, (4) he replies:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , Public Group , The Reply: "I am Ziad"</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="d07e38dc-4d8f-43c6-8a8c-559f271b7036.png" alt="d07e38dc-4d8f-43c6-8a8c-559f271b7036.png" loading="lazy">
+    <p><em>wa0_3 reply: "I am Ziad"  Direct evidence of the real name</em></p>
+  </div>
+</div>
+<div class="callout" style="border-color:#00c85340; background:rgba(0,200,83,0.08);">
+  <div class="callout-header" style="color:#00c853; background:rgba(0,200,83,0.12);">
+    <span class="callout-icon">✅</span>
+    <span class="callout-title">✅ Intersection of Three Independent Evidences on the Name "Ziad"</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#00c85325;">
+    <p><strong>Evidence 1:</strong> The email <code>wa3ziadwa@gmail.com</code> linked to the wa__3 account on the forum , "ziad" is in the middle of the email. <strong>Evidence 2:</strong> The direct confession "I am Ziad" in the public group. <strong>Evidence 3:</strong> (As we will see in the next section) , The alias "Ziad" in another group.</p>
+  </div>
+</div>
+<h1 id="10--tracking-the-telegram-account-via-nft-gifts">10 -Tracking the Telegram Account via NFT Gifts<a href="#10--tracking-the-telegram-account-via-nft-gifts" class="heading-anchor">🔗</a></h1>
+<p><strong>NFT GIFT CHAIN ANALYSIS</strong></p>
+<p>While tracking the backup account <strong>@i5_g7</strong> (ID: <code>7448932913</code>), we faced a problem: <strong>We couldn't track his messages directly</strong>. But we noticed something unique , the account holds <strong>NFT gifts</strong> on Telegram.</p>
+<div class="callout" style="border-color:#4a9eff40; background:rgba(74,158,255,0.08);">
+  <div class="callout-header" style="color:#4a9eff; background:rgba(74,158,255,0.12);">
+    <span class="callout-icon">📝</span>
+    <span class="callout-title">📝 🧠 Innovative Technique: Tracking Groups via NFT Gifts</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#4a9eff25;">
+    <p>NFT gifts on Telegram show who sent them and who received them. By tracing the chain of gifts, we identified the <strong>people with whom i5_g7 exchanges gifts</strong> , and then identified <strong>the mutual groups between them</strong>. This gave us a window into his activity in groups we didn't even know existed.</p>
+  </div>
+</div>
+<p>Prior to this, we retrieved the account's historical usernames linked to the same ID:</p>
+<pre><code>Telegram ID: 7448932913
+Current Username: @d4bbd
+Previous Usernames: y7u1i, d4bbd, dzbbd, Y7ui7</code></pre>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: OSINT , i5_g7 Account Profile , Name "RpU"</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="19b8d1ec-8531-448c-ab5a-b142e55f1f97.png" alt="19b8d1ec-8531-448c-ab5a-b142e55f1f97.png" loading="lazy">
+    <p><em>ID: 7448932913 | Current Username: @d4bbd | Date of Birth: January 1, 2005 (Age: 21) | Spoofed Location: DC4, Amsterdam NL (VPN)</em></p>
+  </div>
+</div>
+<p>In the groups we discovered via NFT tracking, we found the account involved in explicit malicious activities:</p>
+<img src="e653abca-8e70-48cb-b484-48080f58c2a1.png" alt="e653abca-8e70-48cb-b484-48080f58c2a1.png" loading="lazy">
+<p><strong>Note:</strong> The account was actively <strong>doxing Egyptian individuals</strong> in a public Telegram group by publishing personal information upon request. This strongly indicates that the operator had access to one or more <strong>Egyptian databases</strong>, which were used as the primary source for performing these doxing requests.</p>
+<img src="fee2e200-8271-4482-bd99-588c9f91be17.png" alt="fee2e200-8271-4482-bd99-588c9f91be17.png" loading="lazy">
+<p><strong><em>A screenshot proving his access to the admin panel of a compromised Egyptian website</em></strong></p>
+<p>More importantly , in one of those groups, we found the account officially bearing the alias <strong>"Ziad"</strong>, with a direct mention to him from another member: <em>"Ziad, look"</em>:</p>
+<img src="2f1ff482-1d95-484f-911d-c26b69ab3cbe.png" alt="2f1ff482-1d95-484f-911d-c26b69ab3cbe.png" loading="lazy">
+<p><strong>We also identified the same account serving as an administrator in one of the Telegram groups, where it operated under the alias Ziad.</strong></p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , Mutual Group , i5_g7 bears the alias "Ziad" , Third Evidence</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="22454b63-1d82-4e65-a718-df020b68de28.jpg" alt="22454b63-1d82-4e65-a718-df020b68de28.jpg" loading="lazy">
+    <p><em>The group's member list shows the account under the alias "Ziad" , and messages are directed to him by this name</em></p>
+  </div>
+</div>
+<div class="callout" style="border-color:#00c85340; background:rgba(0,200,83,0.08);">
+  <div class="callout-header" style="color:#00c853; background:rgba(0,200,83,0.12);">
+    <span class="callout-icon">✅</span>
+    <span class="callout-title">✅ Final Confirmation: wa0_3 = i5_g7 = Ziad</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#00c85325;">
+    <p>We now have three independent pieces of evidence: (1) The email containing "ziad", (2) The direct confession "I am Ziad" in a public group when mentioning his backup account i5_g7, (3) The official alias "Ziad" in another group on the i5_g7 account itself. All this links wa0_3 and i5_g7 to a single person named Ziad.</p>
+  </div>
+</div>
+<h1 id="11---tying-revesky-to-wa03">11 - Tying Revesky to WA0_3<a href="#11---tying-revesky-to-wa03" class="heading-anchor">🔗</a></h1>
+<p><strong>FINAL ATTRIBUTION , REVESKY LINKAGE</strong></p>
+<p>Until now, our entire investigation revolved around Bovax/wa0_3. But <strong>Revesky</strong> , the account that suddenly appeared on DarkForums publishing leaks from Egyptian Ministries , was not yet tied to any account. Revesky appeared on DarkForums in <strong>May 2026</strong> and published two massive leaks:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: DarkForums , Ministry of Education , May 13, 2026</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="29d25874-2b9a-4893-a396-da581398286f.png" alt="29d25874-2b9a-4893-a396-da581398286f.png" loading="lazy">
+    <p><em>26.8M Students (Grade 1→12) + 3.8M Teachers + Full Admin Access , 22.6GB , Includes managing student and teacher accounts, modifying exams, and accessing all schools</em></p>
+  </div>
+</div>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: DarkForums , Ministry of Tourism and Antiquities , May 16, 2026</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="c7758e7a-f513-4f65-b6d1-6b005dd8a037.png" alt="c7758e7a-f513-4f65-b6d1-6b005dd8a037.png" loading="lazy">
+    <p><em>700K Employee PII (Affiliated with Ministry of Interior) , 547GB , National ID, ID photo, criminal record, contracts, health certificates</em></p>
+  </div>
+</div>
+<p>In both posts, Revesky provided a contact method via <strong>Session Messenger</strong> , a decentralized, encrypted protocol that doesn't require a phone number , reflecting security awareness to avoid Telegram for buyer communications:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: IOC , Revesky's Session ID</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="e1811226-b2f2-410c-8be8-b39081f77ccd.jpg" alt="e1811226-b2f2-410c-8be8-b39081f77ccd.jpg" loading="lazy">
+    <p><code>Session ID: 059005dfebfcd1d41bb7a406c1acff49c6eaa6606be5ed64bb6e973d253aa4450d</code></p>
+  </div>
+</div>
+<p><strong>How did we link Revesky to wa0_3?</strong> We found in a <strong>private Telegram conversation</strong> with wa0_3 (dated <strong>December 30, 2025</strong>) that he claimed to have dumped the Egyptian Ministry of Education database:</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Telegram , Private Chat , wa0_3 claims possession of Ministry of Education data , December 30, 2025</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="c61c29f9-0524-43c2-af3b-64d0882fd9ff.jpg" alt="c61c29f9-0524-43c2-af3b-64d0882fd9ff.jpg" loading="lazy">
+    <p><em>"I dumped the teachers' data" , "They are 4 million" , "And 30 million students" , December 30, 2025</em></p>
+  </div>
+</div>
+<p>The screenshot of this conversation was <strong>shared with us on January 6, 2026</strong>, providing the first indication that wa0_3 possessed a large Ministry of Education dataset.</p>
+<p>For independent verification, on <strong>January 6, 2026</strong>, we contacted <strong>Wa0_3</strong> privately via <strong>Telegram</strong> and sent him the <strong>phone number of a real teacher employed by the Egyptian Ministry of Education</strong>, requesting a lookup.</p>
+<div class="callout" style="border-color:#7c4dff40; background:rgba(124,77,255,0.08);">
+  <div class="callout-header" style="color:#7c4dff; background:rgba(124,77,255,0.12);">
+    <span class="callout-icon">📋</span>
+    <span class="callout-title">📋 Evidence: Session , Field Verification , January 6, 2026 , Revesky returns the complete teacher profile</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#7c4dff25;">
+    <img src="62e1bbd5-fa8e-48bb-94ae-7dbba7f4378e.jpg" alt="62e1bbd5-fa8e-48bb-94ae-7dbba7f4378e.jpg" loading="lazy">
+    <p><em>wa0_3 returned the teacher's complete profile, including the full name, teacher code, national ID, directorate, school, subject, job title, occupational grade, hiring date, employment status, and educational qualification. The returned information was verified and matched the teacher's actual records.</em></p>
+  </div>
+</div>
+<p><strong>The numbers also match closely:</strong> wa0_3 claimed to possess <strong>4 million teacher records</strong> and <strong>30 million student records</strong> in December 2025, while Revesky later advertised a Ministry of Education dataset containing <strong>3.8 million teachers</strong> and <strong>26.8 million students</strong>. The close correspondence strongly indicates they were referring to the same dataset.</p>
+<div class="callout" style="border-color:#ff444440; background:rgba(255,68,68,0.08);">
+  <div class="callout-header" style="color:#ff4444; background:rgba(255,68,68,0.12);">
+    <span class="callout-icon">🔴</span>
+    <span class="callout-title">🔴 Confirmed Attribution: Revesky = WA0_3 = Bovax</span>
+    
+  </div>
+  <div class="callout-body" style="border-color:#ff444425;">
+    <p><strong>Evidence:</strong> (1) wa0_3 claimed to possess approximately <strong>4 million teacher records</strong> and <strong>30 million student records</strong> in December 2025. (2) The screenshot documenting this claim was shared with us on <strong>January 6, 2026</strong>. (3) On the same day, we independently verified the dataset by sending Revesky the phone number of a real Egyptian Ministry of Education teacher, and he returned the correct record. (4) Revesky later advertised the same dataset with <strong>3.8M teachers</strong> and <strong>26.8M students</strong>. (5) Bovax later admitted that he was <strong>wa0_3</strong>.</p>
+    <p><strong>Therefore: Revesky = wa0_3 = Bovax = One Person.</strong></p>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+// TOC active state on scroll
+const tocLinks = document.querySelectorAll('.toc-link');
+const headings = document.querySelectorAll('h1[id], h2[id], h3[id], h4[id], h5[id], h6[id]');
+
+function updateActiveToc() {
+  let current = '';
+  headings.forEach(h => {
+    if (window.scrollY >= h.offsetTop - 120) current = h.id;
+  });
+  tocLinks.forEach(l => {
+    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
+  });
+}
+
+window.addEventListener('scroll', updateActiveToc, { passive: true });
+updateActiveToc();
+
+// Foldable callouts
+document.querySelectorAll('.callout-header.foldable').forEach(header => {
+  header.addEventListener('click', () => {
+    header.closest('.callout').classList.toggle('collapsed');
+  });
+});
+
+// Smooth TOC scroll
+document.querySelectorAll('.toc-link').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
