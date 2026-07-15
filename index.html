@@ -75,15 +75,26 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-weight: 600;
-  font-size: 13px;
-  color: var(--text-muted);
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--heading);
+  letter-spacing: 1px;
   text-transform: uppercase;
+  background: linear-gradient(90deg, #b7bdf8, #c6a0f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.sidebar-brand:hover {
+  filter: drop-shadow(0 0 8px rgba(198,160,246,0.5));
+  transform: scale(1.02);
 }
 
 .sidebar-brand svg {
-  opacity: 0.7;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 5px rgba(124,58,237,0.5));
 }
 
 .toc-title {
@@ -532,31 +543,30 @@ li::marker {
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-brand">
-        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+        <svg width="22" height="22" viewBox="0 0 100 100" fill="none">
           <path d="M50 5 L90 25 L90 75 L50 95 L10 75 L10 25 Z" fill="#7c3aed" opacity="0.8"/>
           <path d="M50 20 L75 35 L75 65 L50 80 L25 65 L25 35 Z" fill="#a78bfa" opacity="0.9"/>
           <path d="M50 35 L65 45 L65 55 L50 65 L35 55 L35 45 Z" fill="#ddd6fe"/>
         </svg>
-        Obsidian
+        Revesky
       </div>
     </div>
     <div class="toc-title">Table of Contents</div>
     <ul class="toc-list" id="toc-list">
       <li class="toc-item"><a href="#table-of-contents" class="toc-link toc-h2">Table of Contents</a></li>
-      <li class="toc-item"><a href="#00---tldr" class="toc-link toc-h1">00 - TL;DR</a></li>
-      <li class="toc-item"><a href="#introduction-methodology" class="toc-link toc-h1">INTRODUCTION & METHODOLOGY</a></li>
-      <li class="toc-item"><a href="#01--bovax-appears-in-hacker-groups" class="toc-link toc-h1">01- Bovax Appears in Hacker Groups</a></li>
+      <li class="toc-item"><a href="#00---executive-summary" class="toc-link toc-h1">00 - Executive Summary</a></li>
+      <li class="toc-item"><a href="#01---introduction-methodology" class="toc-link toc-h1">01 - INTRODUCTION & METHODOLOGY</a></li>
+      <li class="toc-item"><a href="#01---the-first-thread-bovax-appears-in-hacker-groups" class="toc-link toc-h1">01 - The First Thread: Bovax Appears in Hacker Groups</a></li>
       <li class="toc-item"><a href="#02---telegram-bot" class="toc-link toc-h1">02 - Telegram Bot</a></li>
-      <li class="toc-item"><a href="#03---telegram-channels" class="toc-link toc-h1">03 - Digital Infrastructure: Channels, Pricing, and Donations</a></li>
+      <li class="toc-item"><a href="#03---telegram-channels" class="toc-link toc-h1">03 - Telegram Channels</a></li>
       <li class="toc-item"><a href="#04---does-he-actually-have-the-vodafone-system" class="toc-link toc-h1">04 - Does He Actually Have the Vodafone System?</a></li>
       <li class="toc-item"><a href="#05---unmasking-the-first-admin" class="toc-link toc-h1">05 - Unmasking the First Admin</a></li>
       <li class="toc-item"><a href="#06---bovax-reveals-he-is-wa03" class="toc-link toc-h1">06 - Bovax Reveals He is WA0_3</a></li>
       <li class="toc-item"><a href="#07---tracking-wa03-across-forums" class="toc-link toc-h1">07 - Tracking WA0_3 Across Forums</a></li>
       <li class="toc-item"><a href="#08---cybers102-team" class="toc-link toc-h1">08 - CyberS102 Team</a></li>
       <li class="toc-item"><a href="#09---real-name-confirmation" class="toc-link toc-h1">09 - Real Name Confirmation</a></li>
-      <li class="toc-item"><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="toc-link toc-h1">10 -Tracking the Telegram Account via NFT Gifts</a></li>
+      <li class="toc-item"><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="toc-link toc-h1">10 - Tracking the Telegram Account via NFT Gifts</a></li>
       <li class="toc-item"><a href="#11---tying-revesky-to-wa03" class="toc-link toc-h1">11 - Tying Revesky to WA0_3</a></li>
-
     </ul>
   </nav>
 
@@ -568,16 +578,16 @@ li::marker {
   <li><a href="#00---executive-summary" class="wikilink">00 - Executive Summary</a></li>
   <li><a href="#01---introduction-methodology" class="wikilink">01 - INTRODUCTION & METHODOLOGY</a></li>
   <li><a href="#01---the-first-thread-bovax-appears-in-hacker-groups" class="wikilink">01 - The First Thread: Bovax Appears in Hacker Groups</a></li>
-  <li><a href="#02---telegram-bot" class="wikilink">02 - Telegram Bot </a></li>
+  <li><a href="#02---telegram-bot" class="wikilink">02 - Telegram Bot</a></li>
   <li><a href="#03---telegram-channels" class="wikilink">03 - Telegram Channels</a></li>
   <li><a href="#04---does-he-actually-have-the-vodafone-system" class="wikilink">04 - Does He Actually Have the Vodafone System?</a></li>
   <li><a href="#05---unmasking-the-first-admin" class="wikilink">05 - Unmasking the First Admin</a></li>
-  <li><a href="#06---bovax-reveals-he-is-wa0_3" class="wikilink">06 - Bovax Reveals He is WA0_3</a></li>
-  <li><a href="#07---tracking-wa0_3-across-forums" class="wikilink"> 07 - Tracking WA0_3 Across Forums</a></li>
-  <li><a href="#08---cybers102-team" class="wikilink"> 08 - CyberS102 Team</a></li>
+  <li><a href="#06---bovax-reveals-he-is-wa03" class="wikilink">06 - Bovax Reveals He is WA0_3</a></li>
+  <li><a href="#07---tracking-wa03-across-forums" class="wikilink">07 - Tracking WA0_3 Across Forums</a></li>
+  <li><a href="#08---cybers102-team" class="wikilink">08 - CyberS102 Team</a></li>
   <li><a href="#09---real-name-confirmation" class="wikilink">09 - Real Name Confirmation</a></li>
-  <li><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="wikilink">10 -Tracking the Telegram Account via NFT Gifts</a></li>
-  <li><a href="#11---tying-revesky-to-wa0_3" class="wikilink"> 11 - Tying Revesky to WA0_3</a></li>
+  <li><a href="#10--tracking-the-telegram-account-via-nft-gifts" class="wikilink">10 - Tracking the Telegram Account via NFT Gifts</a></li>
+  <li><a href="#11---tying-revesky-to-wa03" class="wikilink">11 - Tying Revesky to WA0_3</a></li>
 </ul>
 <hr>
 <h1 id="00---executive-summary">00 - Executive Summary<a href="#00---executive-summary" class="heading-anchor">🔗</a></h1>
@@ -1148,11 +1158,19 @@ document.querySelectorAll('.callout-header.foldable').forEach(header => {
 });
 
 // Smooth TOC scroll
-document.querySelectorAll('.toc-link').forEach(link => {
+document.querySelectorAll('.toc-link, .wikilink').forEach(link => {
   link.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(link.getAttribute('href'));
-    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const href = link.getAttribute('href');
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const id = href.substring(1);
+      const target = document.getElementById(id);
+      if (target) {
+        const offset = 60;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
   });
 });
 </script>
